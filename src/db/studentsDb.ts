@@ -1,14 +1,14 @@
 import sqlite3 from 'sqlite3';
 
-import type GroupInterface from '@/types/GroupInterface';
+import StudentInterface from '@/types/StudentInterface';
 
 sqlite3.verbose();
 
-export const getGroupsDb = async (): Promise<GroupInterface[]> => {
+export const getStudentsDb = async (): Promise<StudentInterface[]> => {
   const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
 
-  const groups = await new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM class';
+  const students = await new Promise((resolve, reject) => {
+    const sql = 'select * from students';
     db.all(sql, [], (err, rows) => {
       if (err) {
         reject(err);
@@ -20,5 +20,5 @@ export const getGroupsDb = async (): Promise<GroupInterface[]> => {
     });
   });
 
-  return groups as GroupInterface[];
+  return students as StudentInterface[];
 };
