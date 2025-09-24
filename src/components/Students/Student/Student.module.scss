@@ -1,0 +1,20 @@
+.Student {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 30px 0;
+
+  .student-info {
+    display: flex;
+    align-items: center;
+    gap: 10px
+  }
+}
+
+.--isDeleted {
+  color: var(--color3);
+
+  button {
+    display: none;
+  }
+}
