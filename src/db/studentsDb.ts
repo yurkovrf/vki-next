@@ -41,3 +41,23 @@ export const deleteStudentDb = async (studentId: number): Promise<number> => {
 
     return studentId;
 }
+
+export const addStudentDb = async (first_name: string, last_name: string, middle_name: string, groupId: number): Promise<number> => {
+    const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
+
+    const studentId: number = await new Promise((resolve, reject) => {
+        const sql = `insert into students (first_name, last_name, middle_name, groupId) values (?, ?, ?, ?)`;
+        db.run(sql, [first_name, last_name, middle_name, groupId], function(err) {
+            if (err) {
+                reject(err);
+                db.close();
+                return;
+            }
+            resolve(this.lastID);
+            db.close();
+        })
+    });
+
+    return studentId;
+}
+

@@ -17,7 +17,7 @@ const Student = ({student, onDelete}: Props): React.ReactElement => {
     };
 
     return (
-        <div className={`${styles.Student} ${student.isDeleted ? styles['--isDeleted'] : '' }`}>
+        <div key={student.id} className={`${styles.Student} ${student.isDeleted ? styles['--isDeleted'] : '' }`}>
             <div className={styles["student-info"]}>
                 <span>
                     {student.id} - {student.last_name} {student.first_name} {student.middle_name}

@@ -1,0 +1,12 @@
+.add-student {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

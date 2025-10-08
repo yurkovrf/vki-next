@@ -3,12 +3,13 @@ import {
   useMutation,
   useQueryClient,
 } from '@tanstack/react-query';
-import { deleteStudentApi, getStudentsApi } from '@/api/studentsApi';
+import { addStudentApi, deleteStudentApi, getStudentsApi } from '@/api/studentsApi';
 import type StudentInterface from '@/types/StudentInterface';
 
 interface StudentsHookInterface {
   students: StudentInterface[];
   deleteStudentMutate: (studentId: number) => void;
+  addStudentMutate: (student: StudentInterface) => void;
 }
 
 const useStudents = (): StudentsHookInterface => {
@@ -62,9 +63,47 @@ const useStudents = (): StudentsHookInterface => {
     // },
   });
 
+   const addStudentMutate = useMutation({
+    mutationFn: async (newStudent: StudentInterface) => {
+      return addStudentApi(newStudent); // возвращает студента с id
+    },
+    onMutate: async (newStudent) => {
+      await queryClient.cancelQueries({ queryKey: ['students'] });
+      const previousStudents = queryClient.getQueryData<StudentInterface[]>(['students']);
+
+      const tempId = -Math.floor(Math.random() * 10000)
+      const optimisticStudent: StudentInterface = {
+        ...newStudent,
+        id: tempId,
+        isDeleted: false,
+      };
+
+      queryClient.setQueryData<StudentInterface[]>(['students'], (old) => [
+        ...(old ?? []),
+        optimisticStudent,
+      ]);
+
+      return { previousStudents, tempId };
+    },
+    onError: (err, variables, context) => {
+      console.error('>>> addStudentMutate error', err);
+      queryClient.setQueryData(['students'], context?.previousStudents);
+    },
+    onSuccess: (addedStudent, context) => {
+      console.log('>>> addStudentMutate onSuccess', addedStudent);
+      // Обновляем список: заменяем временный студент на реальный (с правильным id)
+      queryClient.setQueryData<StudentInterface[]>(['students'], (old = []) =>
+        old.map(student =>
+          student.id === context?.tempId ? {...student, id: addedStudent?.} : student
+        )
+      );
+    },
+  });
+
   return {
     students: data ?? [],
     deleteStudentMutate: deleteStudentMutate.mutate,
+    addStudentMutate: addStudentMutate.mutate
   };
 };
 
