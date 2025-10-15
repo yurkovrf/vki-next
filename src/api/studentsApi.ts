@@ -12,7 +12,7 @@ export const getStudentsApi = async (): Promise<StudentInterface[]> => {
     return groups;
   }
   catch (err) {
-    console.log('>>> getGroupsApi', err);
+    console.log('>>> getStudentsApi', err);
     return [] as StudentInterface[];
   }
 };
@@ -37,7 +37,7 @@ export const deleteStudentApi = async (studentId: number): Promise<{deletedStude
   }
 };
 
-export const addStudentApi = async (student: StudentInterface): Promise<{student: StudentInterface} | null> => {
+export const addStudentApi = async (student: StudentInterface): Promise<{id: number} | null> => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API}students/add`, 
       { 

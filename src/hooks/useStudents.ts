@@ -85,16 +85,21 @@ const useStudents = (): StudentsHookInterface => {
 
       return { previousStudents, tempId };
     },
-    onError: (err, variables, context) => {
+    onError: (err, _, context) => {
       console.error('>>> addStudentMutate error', err);
       queryClient.setQueryData(['students'], context?.previousStudents);
     },
-    onSuccess: (addedStudent, context) => {
+    onSuccess: (addedStudent, _, context) => {
       console.log('>>> addStudentMutate onSuccess', addedStudent);
       // Обновляем список: заменяем временный студент на реальный (с правильным id)
+      if (!addedStudent?.id) {
+        console.warn('>>> onSuccess: missing addedStudent.id');
+        return;
+      }
+
       queryClient.setQueryData<StudentInterface[]>(['students'], (old = []) =>
         old.map(student =>
-          student.id === context?.tempId ? {...student, id: addedStudent?.} : student
+          student.id === context.tempId ? {...student, id: addedStudent?.id} : student
         )
       );
     },

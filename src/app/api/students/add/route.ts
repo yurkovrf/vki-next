@@ -10,7 +10,7 @@ export async function POST(
 
     const newStudent = await addStudentDb(first_name, last_name, middle_name, groupId);
 
-    return new Response(JSON.stringify({ newStudent }), {
+    return new Response(JSON.stringify({ id: newStudent }), {
         headers: {
             'Content-Type': 'application/json'
         }
