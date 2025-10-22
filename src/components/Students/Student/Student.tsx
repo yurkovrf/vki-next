@@ -20,7 +20,7 @@ const Student = ({student, onDelete}: Props): React.ReactElement => {
         <div key={student.id} className={`${styles.Student} ${student.isDeleted ? styles['--isDeleted'] : '' }`}>
             <div className={styles["student-info"]}>
                 <span>
-                    {student.id} - {student.last_name} {student.first_name} {student.middle_name}
+                    {student.id} - {student.lastName} {student.firstName} {student.middleName}
                 </span>
                 <span>{groups.find(x => x.id === student.groupId)?.name}</span>
             </div>

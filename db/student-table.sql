@@ -1,7 +1,12 @@
-CREATE TABLE student(  
+DROP TABLE students;
+CREATE TABLE students(  
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    first_name TEXT,
-    last_name TEXT,
-    middle_name TEXT,
+    firstName TEXT,
+    lastName TEXT,
+    middleName TEXT,
     groupId INTEGER
 );
+
+ALTER TABLE students ADD uuid [text];
+
+DELETE FROM students;

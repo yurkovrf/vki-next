@@ -1,6 +1,7 @@
-export type StudentData = {
+interface FioInterface {
   firstName: string;
   lastName: string;
   middleName: string;
-  groupId: number;
 };
+
+export default FioInterface;

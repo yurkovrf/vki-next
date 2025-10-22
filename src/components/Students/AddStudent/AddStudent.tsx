@@ -22,15 +22,15 @@ const AddStudent = (): React.ReactElement => {
             >
                 <div className={styles["field"]}>
                     <span>Имя</span>
-                    <input {...register("first_name", { required: true })} />
+                    <input {...register("firstName", { required: true })} />
                 </div>
                 <div className={styles["field"]}>
                     <span>Фамилия</span>
-                    <input {...register("last_name", { required: true })} />
+                    <input {...register("lastName", { required: true })} />
                 </div>
                 <div className={styles["field"]}>
                     <span>Отчество</span>
-                    <input {...register("middle_name", { required: true })} />
+                    <input {...register("middleName", { required: true })} />
                 </div>
                 <div className={styles["field"]}>
                     <span>Номер группы</span>

@@ -8,8 +8,8 @@ export const getStudentsApi = async (): Promise<StudentInterface[]> => {
     if (!response.ok) {
       throw new Error(`Ошибка HTTP: ${response.status}${response.statusText}`);
     }
-    const groups = await response.json() as StudentInterface[];
-    return groups;
+    const students = await response.json() as StudentInterface[];
+    return students;
   }
   catch (err) {
     console.log('>>> getStudentsApi', err);
@@ -53,9 +53,7 @@ export const addStudentApi = async (student: StudentInterface): Promise<{id: num
       throw new Error(`Ошибка HTTP: ${response.status}${response.statusText}`);
     }
 
-    const newStudent = await response.json();
-
-    return newStudent;
+     return response.json() as Promise<StudentInterface>;
   } catch (err) {
     console.log('>>> addStudentApi', err);
     return null;

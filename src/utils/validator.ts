@@ -3,14 +3,14 @@ import { StudentData } from "@/types/StudentData";
 export function validateStudentData(formData: FormData): { success: true; data: StudentData } | { success: false; errors: string[] } {
   const errors: string[] = [];
 
-  const first_name = formData.get('first_name')?.toString()?.trim();
-  const last_name = formData.get('last_name')?.toString()?.trim();
-  const middle_name = formData.get('middle_name')?.toString()?.trim();
+  const firstName = formData.get('firstName')?.toString()?.trim();
+  const lastName = formData.get('lastName')?.toString()?.trim();
+  const middleName = formData.get('middleName')?.toString()?.trim();
   const groupIdStr = formData.get('groupId')?.toString()?.trim();
 
-  if (!first_name) errors.push('First name is required');
-  if (!last_name) errors.push('Last name is required');
-  if (!middle_name) errors.push('Middle name is required');
+  if (!firstName) errors.push('First name is required');
+  if (!lastName) errors.push('Last name is required');
+  if (!middleName) errors.push('Middle name is required');
 
   let groupId: number | null = null;
   if (!groupIdStr) {
@@ -31,9 +31,9 @@ export function validateStudentData(formData: FormData): { success: true; data: 
   return {
     success: true,
     data: {
-      first_name: first_name!,
-      last_name: last_name!,
-      middle_name: middle_name!,
+      firstName: firstName!,
+      lastName: lastName!,
+      middleName: middleName!,
       groupId: groupId!,
     },
   };

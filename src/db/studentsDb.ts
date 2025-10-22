@@ -1,63 +1,57 @@
-import sqlite3 from 'sqlite3';
-
 import StudentInterface from '@/types/StudentInterface';
+import AppDataSource from './AppDataSource';
+import { Student } from './entity/Student.entity';
+import getRandomFio from '@/utils/getRandomFio';
 
-sqlite3.verbose();
+const studentRepository = AppDataSource.getRepository(Student);
 
+/**
+ * Получение студентов
+ * @returns Promise<StudentInterface[]>
+ */
 export const getStudentsDb = async (): Promise<StudentInterface[]> => {
-    const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
-
-    const students = await new Promise((resolve, reject) => {
-        const sql = 'select * from students';
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                reject(err);
-                db.close();
-                return;
-            }
-            resolve(rows);
-            db.close();
-        });
-    });
-
-    return students as StudentInterface[];
+  return await studentRepository.find();
 };
 
+/**
+ * Удаления студента
+ * @param studentId ИД удаляемого студента
+ * @returns
+ */
 export const deleteStudentDb = async (studentId: number): Promise<number> => {
-    const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
+  await studentRepository.delete(studentId);
+  return studentId;
+};
 
-    const deleted = await new Promise((resolve, reject) => {
-        const sql = `delete from students where id = ${studentId}`;
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                reject(err);
-                db.close();
-                return;
-            }
-            resolve(rows);
-            db.close();
-        })
+/**
+ * Добавление студента
+ * @param studentField поля студента
+ * @returns
+ */
+export const addStudentDb = async (studentFields: Omit<StudentInterface, 'id'>): Promise<StudentInterface> => {
+  const student = new Student();
+  const newStudent = await studentRepository.save({
+    ...student,
+    ...studentFields,
+  });
+  return newStudent;
+};
+
+/**
+ * Добавление  рандомных студента
+ */
+export const addRandomStudentsDb = async (amount: number = 10): Promise<StudentInterface[]> => {
+  const students: StudentInterface[] = [];
+
+  for (let i = 0; i < amount; i++) {
+    const fio = getRandomFio();
+
+    const newStudent = await addStudentDb({
+      ...fio,
+      groupId: 1,
     });
+    students.push(newStudent);
+  }
 
-    return studentId;
-}
-
-export const addStudentDb = async (first_name: string, last_name: string, middle_name: string, groupId: number): Promise<number> => {
-    const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
-
-    const studentId: number = await new Promise((resolve, reject) => {
-        const sql = `insert into students (first_name, last_name, middle_name, groupId) values (?, ?, ?, ?)`;
-        db.run(sql, [first_name, last_name, middle_name, groupId], function(err) {
-            if (err) {
-                reject(err);
-                db.close();
-                return;
-            }
-            resolve(this.lastID);
-            db.close();
-        })
-    });
-
-    return studentId;
-}
-
+  return students;
+};

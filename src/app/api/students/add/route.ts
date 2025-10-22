@@ -4,11 +4,11 @@ import { NextApiRequest } from "next";
 
 export async function POST(
     req: Request,
-    { params }: {params: {first_name: string, last_name: string, middle_name: string, groupId: number}},
+    { params }: {params: {firstName: string, lastName: string, middleName: string, groupId: number}},
 ): Promise<Response> {
-    const {first_name, last_name, middle_name, groupId} = await req.json();
+    const {firstName, lastName, middleName, groupId} = await req.json();
 
-    const newStudent = await addStudentDb(first_name, last_name, middle_name, groupId);
+    const newStudent = await addStudentDb({firstName, lastName, middleName, groupId});
 
     return new Response(JSON.stringify({ id: newStudent }), {
         headers: {
